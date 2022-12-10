@@ -1,0 +1,2 @@
+# IPSymconWallThermostat
+IPS-Modul
