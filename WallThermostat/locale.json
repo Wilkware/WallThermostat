@@ -1,0 +1,32 @@
+{
+    "translations": {
+        "de": {
+            "Wall Thermostat": "Wandthermostat",
+            "\nWall Thermostat\n ": "\nWandthermostat\n ",
+            "The wall thermostat synchronises the selected heating profile/mode with the linked actuators.": "Der Wandthermostat synchronisiert das gewählte Heizprofil bzw. -modus mit den verknüpften Stellantrieben.",
+            "Heating system ...": "Heizungssystem ...",
+            "Currently only thermostats and actuators HmIP-WTH2 and HmIP-eTRV(-2/c) are supported!": "Derzeit werden nur Thermostate und Stellantriebe HmIP-WTH2 und HmIP-eTRV(-2/c) unterstützt!",
+            "(Wall) thermostat:": "(Wand)thermostat:",
+            "Radiator 1:": "1.Heizkörper:",
+            "Radiator 2:": "2.Heizkörper:",
+            "Radiator 3:": "3.Heizkörper:",
+            "Radiator 4:": "4.Heizkörper:",
+            "Radiator 5:": "5.Heizkörper:",
+            "Radiator 6:": "6.Heizkörper:",
+            "Radiator 7:": "7.Heizkörper:",
+            "Radiator 8:": "8.Heizkörper:",
+            "No": "Nein",
+            "Yes": "Ja",
+            "Profile": "Profil",
+            "Mode": "Modus",
+            "Advanced settings ...": "Erweiterte Einstellungen ...",
+            "By default, both profile and mode are synchronized with the radiators!": "Standardmäßig werden sowohl Profil als auch Mode mit den Heizkörpern abgeglichen!",
+            "Create a switch to activate or deactivate profile matching!": "Erstellen eines Schalters zum Aktivieren bzw. Deaktivieren des Profilabgleichs!",
+            "Create a switch to activate or deactivate the mode adjustment!": "Erstellen eines Schalters zum Aktivieren bzw. Deaktivieren des Modusabgleichs!",
+            "... to use the dashboard message script. More information you get in the forum to thema: Meldungsanzeige im WebFront:": "... zum Verwenden des Meldungsverwaltungsscripts. Genau Informationen findet man im Forum zum Thema: Meldungsanzeige im WebFront:",
+            "Message script:": "Meldungsskript:",
+            "Source code, donation and licence ...": "Quellcode, Spende und Lizenz ...",
+            "The software is free of charge for non-commercial use, I would appreciate a donation if you like the module.": "Die Software ist für die nicht kommerzielle Nutzung kostenlos, über eine Spende bei Gefallen des Moduls würde ich mich sehr freuen."
+        }
+    }
+}

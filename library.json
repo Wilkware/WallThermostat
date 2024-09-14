@@ -1,0 +1,12 @@
+{
+    "id": "{6036B176-D13A-A81D-0F03-D46858E6ED97}",
+    "name": "Wall Thermostat",
+    "author": "Wilkware (@Pitti)",
+    "url": "https://wilkware.de",
+    "compatibility": {
+        "version": "6.4"
+    },
+    "version": "1.0",
+    "build": 20240913,
+    "date": 1726228800
+}
