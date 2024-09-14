@@ -36,7 +36,7 @@
                     "validModules": [
                         "{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}"
                     ],
-            "width": "425px"
+                    "width": "425px"
                 },
                 {
                     "type": "RowLayout",
