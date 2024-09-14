@@ -1,4 +1,4 @@
-# Fenster- und Türkontakt (Contact Sensor)
+# (Wand)thermostat (Wall Thermostat)
 
 [![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg?style=flat-square)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
 [![Product](https://img.shields.io/badge/Symcon%20Version-6.4-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
@@ -21,8 +21,9 @@ Das Modul synchronisiert das gewählte Heizprofil bzw. -modus mit den verknüpft
 
 ### 1. Funktionsumfang
 
-* Schalten bzw. Abgleichen mit bis zu 8 Heizkörpern (Ventilantrieben)
+* Schalten bzw. Abgleichen mit bis zu 8 Heizkörpern (Ventil-/Stellantrieben)
 * Selektive Synchronisation von Profil und Modus
+* Nur für Homatic Geräte derzeit geeignet!
 
 ### 2. Voraussetzungen
 
@@ -47,15 +48,15 @@ Einstellungsbereich:
 
 Name                            | Beschreibung
 ------------------------------- | -----------------------------------------------------------------
-(Wand)thermostat                | Steuerungskanal des führenden(übersteuernden) Thermostates
-1.Heizkörper                    | Steuerungskanal des ersten Stellantriebs
-2.Heizkörper                    | Steuerungskanal des zweiten Stellantriebs
-3.Heizkörper                    | Steuerungskanal des drittem Stellantriebs
-4.Heizkörper                    | Steuerungskanal des vierten Stellantriebs
-5.Heizkörper                    | Steuerungskanal des fünften Stellantriebs
-6.Heizkörper                    | Steuerungskanal des sechsten Stellantriebs
-7.Heizkörper                    | Steuerungskanal des siebten Stellantriebs
-8.Heizkörper                    | Steuerungskanal des achten Stellantriebs
+(Wand)thermostat                | Steuerungskanal des führenden(übersteuernden) Thermostates (Kanal 1)
+1.Heizkörper                    | Steuerungskanal des ersten Stellantriebs (Kanal 1)
+2.Heizkörper                    | Steuerungskanal des zweiten Stellantriebs (Kanal 1)
+3.Heizkörper                    | Steuerungskanal des drittem Stellantriebs (Kanal 1)
+4.Heizkörper                    | Steuerungskanal des vierten Stellantriebs (Kanal 1)
+5.Heizkörper                    | Steuerungskanal des fünften Stellantriebs (Kanal 1)
+6.Heizkörper                    | Steuerungskanal des sechsten Stellantriebs (Kanal 1)
+7.Heizkörper                    | Steuerungskanal des siebten Stellantriebs (Kanal 1)
+8.Heizkörper                    | Steuerungskanal des achten Stellantriebs (Kanal 1)
 
 
 > Erweiterte Einstellungrn ...
