@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg?style=flat-square)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
 [![Product](https://img.shields.io/badge/Symcon%20Version-6.4-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
-[![Version](https://img.shields.io/badge/Modul%20Version-1.0.20240913-orange.svg?style=flat-square)](https://github.com/Wilkware/WallThermostat)
+[![Version](https://img.shields.io/badge/Modul%20Version-2.0.20250209-orange.svg?style=flat-square)](https://github.com/Wilkware/WallThermostat)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/WallThermostat/style.yml?branch=main&label=CheckStyle&style=flat-square)](https://github.com/Wilkware/WallThermostat/actions)
 
@@ -23,6 +23,8 @@ Das Modul synchronisiert das gewählte Heizprofil bzw. -modus mit den verknüpft
 
 * Schalten bzw. Abgleichen mit bis zu 8 Heizkörpern (Ventil-/Stellantrieben)
 * Selektive Synchronisation von Profil und Modus
+* Überwachung von zu starker Abkühlung bzw. Aufheizung
+* Überwachung des Beriebszustandes der Stellantriebe (Radiatoren)
 * Nur für Homatic Geräte derzeit geeignet!
 
 ### 2. Voraussetzungen
@@ -58,6 +60,37 @@ Name                            | Beschreibung
 7.Heizkörper                    | Steuerungskanal des siebten Stellantriebs (Kanal 1)
 8.Heizkörper                    | Steuerungskanal des achten Stellantriebs (Kanal 1)
 
+> Periodische Überprüfung ...
+
+Name                     | Beschreibung
+------------------------ | ------------------
+Abkühlung                | Schalter zum Aktivieren der Prüfung auf zu starke Abkühlung des Raumes
+Abweichung von Solltemperatur | Einstellung der Gradzahl (Negativ) um welche sich der Raum von der Solltemperatur abkühlen darf
+Aufheizung               | Schalter zum Aktivieren der Prüfung auf zu starke Aufheizung des Raumes
+Abweichung von Solltemperatur | Einstellung der Gradzahl (Positiv) um welche sich der Raum von der Solltemperatur aufheizen darf
+Ventilzustand            | Schalter zum Aktivieren der Prüfung des Betriebszustandes der Stellantriebe an den Radiatoren
+
+> Zeitsteuerung ...
+
+Name                     | Beschreibung
+------------------------ | ------------------
+Prüfintervall            | Zeit zwischen 2 Inspektionsläufen (Standard 120 Minuten), 0 deaktiviert die Prüfung
+Zeitplan                 | Zeitraum in dem Prüfungen im angeegebenen Intervall erfolgen sollen
+
+> Meldungsverwaltung ...
+
+Name                                      | Beschreibung
+----------------------------------------- | -----------------------------------------------------------------
+Meldung an Anzeige senden                 | Auswahl ob Eintrag in die Meldungsverwaltung erfolgen soll oder nicht (Ja/Nein)
+Lebensdauer der Nachricht                 | Wie lange soll die Meldung dort angezeigt werden?
+Nachricht an Visualisierung senden        | Auswahl ob Push-Nachricht gesendet werden soll oder nicht (Ja/Nein)
+Raumname                                  | Text zur eindeutigen Zuordnung des Raums
+Format der Textmitteilung (Abkühlung)     | Frei wählbares Format der Nachricht/Meldung beim Eintreten einer zu starken Raumabkühlung
+Format der Textmitteilung (Aufheizung)    | Frei wählbares Format der Nachricht/Meldung beim Eintreten einer zu starken Raumaufheizung
+Format der Textmitteilung (Ventilzustand) | Frei wählbares Format der Nachricht/Meldung beim Eintreten eines Problems bei den Stellantrieben
+Visualisierungs-Instanz                   | ID der Visualisierung, an welches die Push-Nachrichten gesendet werden soll (WebFront oder TileVisu Instanz)
+Titel der Nachricht                       | Titel der Push-Nachricht, darf maximal 32 Zeichen lang sein
+Meldsungsskript                           | Skript ID des Meldungsverwaltungsskripts
 
 > Erweiterte Einstellungrn ...
 
@@ -82,6 +115,11 @@ Die erzeugten Variablen können direkt in die Visualisierung verlingt werden.
 Das Modul stellt keine direkten Funktionsaufrufe zur Verfügung.
 
 ### 8. Versionshistorie
+
+v2.0.20250209
+
+* _NEU_: Periodische Prüfung auf zu starker Abkühlung und/oder Aufheizung
+* _NEU_: Periodische Prüfung des Betriebszudtandes der verbundenen Stellantriebe
 
 v1.0.20240913
 

@@ -134,6 +134,280 @@
         },
         {
             "type": "ExpansionPanel",
+            "caption": "Periodic inspection ...",
+            "items": [
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "CheckBox",
+                            "name": "CheckCooling",
+                            "caption": "Cool down",
+                            "width": "200px"
+                        },
+                        {
+                            "type": "NumberSpinner",
+                            "name": "DegreeCooling",
+                            "caption": "Deviation from set temperature:",
+                            "suffix": "°C",
+                            "digits": 1,
+                            "minimum": -10.0,
+                            "maximum": -1.0,
+                            "width": "221px"
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "CheckBox",
+                            "name": "CheckHeating",
+                            "caption": "Heat up",
+                            "width": "200px"
+                        },
+                        {
+                            "type": "NumberSpinner",
+                            "name": "DegreeHeating",
+                            "caption": "Deviation from set temperature:",
+                            "suffix": "°C",
+                            "digits": 1,
+                            "minimum": 1.0,
+                            "maximum": 10.0,
+                            "width": "221px"
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "CheckBox",
+                            "name": "CheckVentile",
+                            "caption": "Valve state",
+                            "width": "200px"
+                        },
+                        {
+                            "type": "Select",
+                            "name": "StateVentile",
+                            "caption": "Check for:",
+                            "width": "200px",
+                            "options": [
+                                {
+                                    "label": "Not ready for operation",
+                                    "value": 0
+                                },
+                                {
+                                    "label": "Error message",
+                                    "value": 1
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Time control ...",
+            "items": [
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "NumberSpinner",
+                            "name": "TestInterval",
+                            "caption": "Test interval:",
+                            "suffix": "minutes",
+                            "minimum": 0,
+                            "maximum": 1440,
+                            "width": "221px"
+                        }
+                    ]
+                },
+                {
+                    "type": "SelectEvent",
+                    "name": "TestSchedule",
+                    "caption": "Schedule:",
+                    "width": "450px"
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Button",
+                            "caption": "Add Schedule",
+                            "onClick": "IPS_RequestAction($id,'create_schedule',$id);"
+                        },
+                        {
+                            "type": "Label",
+                            "caption": "With the help of the button you can create a weekly programme.\nIt is created below the instance. It can then be set to your own needs."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "Dashboard ...",
+            "items": [
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Select",
+                            "name": "DashboardMessage",
+                            "caption": "Send message to dashboard:",
+                            "width": "200px",
+                            "options": [
+                                {
+                                    "label": "No",
+                                    "value": 0
+                                },
+                                {
+                                    "label": "Yes",
+                                    "value": 1
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Select",
+                            "name": "DashboardLifetime",
+                            "caption": "Lifetime of the message:",
+                            "width": "221px",
+                            "options": [
+                                {
+                                    "label": "Always",
+                                    "value": 0
+                                },
+                                {
+                                    "label": "5 min",
+                                    "value": 5
+                                },
+                                {
+                                    "label": "15 min",
+                                    "value": 15
+                                },
+                                {
+                                    "label": "30 min",
+                                    "value": 30
+                                },
+                                {
+                                    "label": "60 min",
+                                    "value": 60
+                                },
+                                {
+                                    "label": "2 h",
+                                    "value": 120
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Select",
+                            "name": "NotificationMessage",
+                            "caption": "Send notification message:",
+                            "width": "200px",
+                            "options": [
+                                {
+                                    "label": "No",
+                                    "value": 0
+                                },
+                                {
+                                    "label": "Yes",
+                                    "value": 1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "ValidationTextBox",
+                            "name": "RoomName",
+                            "caption": "Room name:",
+                            "width": "450px"
+                        },
+                        {
+                            "type": "Label",
+                            "caption": "Specifier:\n%R = Room name, %M = Message Trigger, %D = Date, %T = Time"
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "ValidationTextBox",
+                            "name": "TextCooldown",
+                            "caption": "Text message format (Cool down):",
+                            "width": "450px"
+                        },
+                        {
+                            "type": "ValidationTextBox",
+                            "name": "TextHeatup",
+                            "caption": "Text message format (Heat up):",
+                            "width": "450px"
+                        }
+                    ]
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "ValidationTextBox",
+                            "name": "TextValvestate",
+                            "caption": "Text message format (Valve state):",
+                            "width": "450px"
+                        }
+                    ]
+                },
+                {
+                    "type": "Label",
+                    "caption": "... to send notification messages to a visualization:"
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "SelectInstance",
+                            "name": "InstanceVisu",
+                            "caption": "Visualization Instance:",
+                            "validModules": [
+                                "{3565B1F2-8F7B-4311-A4B6-1BF1D868F39E}",
+                                "{B5B875BB-9B76-45FD-4E67-2607E45B3AC4}"
+                            ],
+                            "width": "450px"
+                        },
+                        {
+                            "type": "ValidationTextBox",
+                            "name": "TitleMessage",
+                            "caption": "Title of the message (max. 32 characters):",
+                            "validate": "^[0-9a-zA-ZäöüÄÖÜß -_&]{0,32}$",
+                            "width": "450px"
+                        }
+                    ]
+                },
+                {
+                    "type": "Label",
+                    "caption": "... to use the dashboard message script. More information you get in the forum to thema: Meldungsanzeige im WebFront:"
+                },
+                {
+                    "type": "SelectScript",
+                    "name": "ScriptMessage",
+                    "caption": "Message script:",
+                    "width": "450px"
+                }
+            ]
+        },
+        {
+            "type": "ExpansionPanel",
             "caption": "Advanced settings ...",
             "items": [
                 {
@@ -185,5 +459,6 @@
                 }
             ]
         }
-    ]
+    ],
+    "status": []
 }
