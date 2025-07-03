@@ -378,18 +378,18 @@ class WallThermostat extends IPSModule
         if ($circuit) {
             $this->SendDebug(__FUNCTION__, 'CIRCUIT: ' . $circuit);
             $vid = $this->ReadPropertyInteger('CircuitVariable');
-            if(IPS_VariableExists($vid)) {
+            if (IPS_VariableExists($vid)) {
                 $state = GetValue($vid);
                 $this->SendDebug(__FUNCTION__, 'STATE: ' . $state);
                 $type = $this->ReadPropertyInteger('CircuitType');
                 $value = $this->ReadPropertyString('CircuitValue');
-                if($type == 0) {
+                if ($type == 0) {
                     $check = ($state == boolval($value));
                 } elseif ($type == 1) {
                     $check = ($state == intval($value));
                 } elseif ($type == 2) {
                     $check = ($state == floatval($value));
-                } else{
+                } else {
                     $check = ($state == $value);
                 }
                 $this->SendDebug(__FUNCTION__, 'CHECK: ' . var_export($check, true));
