@@ -70,6 +70,11 @@ class WallThermostat extends IPSModule
         $this->RegisterPropertyBoolean('CheckVentile', false);
         $this->RegisterPropertyInteger('StateVentile', 1);
 
+        $this->RegisterPropertyBoolean('CheckCircuit', false);
+        $this->RegisterPropertyInteger('CircuitVariable', 1);
+        $this->RegisterPropertyInteger('CircuitType', 3);
+        $this->RegisterPropertyString('CircuitValue', '');
+
         // Schedule
         $this->RegisterPropertyInteger('TestInterval', 120);
         $this->RegisterPropertyInteger('TestSchedule', 1);
@@ -142,6 +147,16 @@ class WallThermostat extends IPSModule
                     $this->SetStatus(104);
                     return;
                 }
+            }
+        }
+        $heating = $this->ReadPropertyInteger('CircuitVariable');
+        if ($heating >= self::IPS_MIN_ID) {
+            if (IPS_VariableExists($heating)) {
+                $this->RegisterReference($heating);
+            } else {
+                $this->SendDebug(__FUNCTION__, 'Variable does not exist - Variable: ' . $heating);
+                $this->SetStatus(104);
+                return;
             }
         }
         $visu = $this->ReadPropertyInteger('InstanceVisu');
@@ -357,11 +372,34 @@ class WallThermostat extends IPSModule
         $cooling = $this->ReadPropertyBoolean('CheckCooling');
         $heating = $this->ReadPropertyBoolean('CheckHeating');
         $ventile = $this->ReadPropertyBoolean('CheckVentile');
+        $circuit = $this->ReadPropertyBoolean('CheckCircuit');
+
+        $check = true;
+        if ($circuit) {
+            $this->SendDebug(__FUNCTION__, 'CIRCUIT: ' . $circuit);
+            $vid = $this->ReadPropertyInteger('CircuitVariable');
+            if(IPS_VariableExists($vid)) {
+                $state = GetValue($vid);
+                $this->SendDebug(__FUNCTION__, 'STATE: ' . $state);
+                $type = $this->ReadPropertyInteger('CircuitType');
+                $value = $this->ReadPropertyString('CircuitValue');
+                if($type == 0) {
+                    $check = ($state == boolval($value));
+                } elseif ($type == 1) {
+                    $check = ($state == intval($value));
+                } elseif ($type == 2) {
+                    $check = ($state == floatval($value));
+                } else{
+                    $check = ($state == $value);
+                }
+                $this->SendDebug(__FUNCTION__, 'CHECK: ' . var_export($check, true));
+            }
+        }
         // Actual & Shall temperature
         $at = 100.0;
         $st = 100.0;
         // for both the same
-        if ($cooling || $heating) {
+        if (($cooling || $heating) && $check) {
             $thermostat = $this->ReadPropertyInteger('Thermostat');
             $vid = @GetObjectByIdent($thermostat, self::WT_ACTUAL);
             if ($vid !== false) {

@@ -191,7 +191,7 @@
                             "type": "Select",
                             "name": "StateVentile",
                             "caption": "Check for:",
-                            "width": "200px",
+                            "width": "221px",
                             "options": [
                                 {
                                     "label": "Not ready for operation",
@@ -202,6 +202,58 @@
                                     "value": 1
                                 }
                             ]
+                        }
+                    ]
+                },
+                {
+                    "type": "CheckBox",
+                    "caption": "Observe the heating circuit when heating up or cooling down!",
+                    "name": "CheckCircuit",
+                    "value": false
+                },
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Label",
+                            "caption": " ",
+                            "width": "40px"
+                        },
+                        {
+                            "type": "SelectVariable",
+                            "caption": "Heating circuit:",
+                            "name": "CircuitVariable",
+                            "width": "381px"
+                        },
+                        {
+                            "type": "Select",
+                            "caption": "Type:",
+                            "name": "CircuitType",
+                            "options": [
+                                {
+                                    "caption": "Boolean",
+                                    "value": 0
+                                },
+                                {
+                                    "caption": "Integer",
+                                    "value": 1
+                                },
+                                {
+                                    "caption": "Float",
+                                    "value": 2
+                                },
+                                {
+                                    "caption": "String",
+                                    "value": 3
+                                }
+                            ],
+                            "width": "150px"
+                        },
+                        {
+                            "type": "ValidationTextBox",
+                            "caption": "Value:",
+                            "name": "CircuitValue",
+                            "width": "150px"
                         }
                     ]
                 }

@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg?style=flat-square)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
 [![Product](https://img.shields.io/badge/Symcon%20Version-6.4-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
-[![Version](https://img.shields.io/badge/Modul%20Version-2.0.20250209-orange.svg?style=flat-square)](https://github.com/Wilkware/WallThermostat)
+[![Version](https://img.shields.io/badge/Modul%20Version-2.1.20250703-orange.svg?style=flat-square)](https://github.com/Wilkware/WallThermostat)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/WallThermostat/style.yml?branch=main&label=CheckStyle&style=flat-square)](https://github.com/Wilkware/WallThermostat/actions)
 
@@ -24,6 +24,7 @@ Das Modul synchronisiert das gewählte Heizprofil bzw. -modus mit den verknüpft
 * Schalten bzw. Abgleichen mit bis zu 8 Heizkörpern (Ventil-/Stellantrieben)
 * Selektive Synchronisation von Profil und Modus
 * Überwachung von zu starker Abkühlung bzw. Aufheizung
+* Berücksichtigung der Heizungsschaltung
 * Überwachung des Beriebszustandes der Stellantriebe (Radiatoren)
 * Nur für Homatic Geräte derzeit geeignet!
 
@@ -69,6 +70,10 @@ Abweichung von Solltemperatur | Einstellung der Gradzahl (Negativ) um welche sic
 Aufheizung               | Schalter zum Aktivieren der Prüfung auf zu starke Aufheizung des Raumes
 Abweichung von Solltemperatur | Einstellung der Gradzahl (Positiv) um welche sich der Raum von der Solltemperatur aufheizen darf
 Ventilzustand            | Schalter zum Aktivieren der Prüfung des Betriebszustandes der Stellantriebe an den Radiatoren
+Heizungsschaltung bei Aufheizung bzw. Abkühlung beachten | Schalter zum Berücksichtigen der Heizungsschaltung (Modus)
+Heizungsschaltung        | Variable, welche den Modus des Heizung beinhaltet
+Typ                      | Auswahl des Variablentyps
+Wert                     | Wert, bei welchem die Prüfung durchgeführt werden soll
 
 > Zeitsteuerung ...
 
@@ -115,6 +120,11 @@ Die erzeugten Variablen können direkt in die Visualisierung verlingt werden.
 Das Modul stellt keine direkten Funktionsaufrufe zur Verfügung.
 
 ### 8. Versionshistorie
+
+v2.1.20250703
+
+* _NEU_: Berücksichtigung der Heizungsschaltung (Modus) bei der Prüfung
+* _FIX_: Interne Bibliotheken überarbeitet und vereinheitlicht
 
 v2.0.20250209
 
