@@ -191,11 +191,11 @@ class WallThermostat extends IPSModule
         }
 
         // Register message update for variables
-        $vid = @GetObjectByIdent($thermostat, self::WT_PROFILE);
+        $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_PROFILE);
         if ($vid !== false) {
             $this->RegisterMessage($vid, VM_UPDATE);
         }
-        $vid = @GetObjectByIdent($thermostat, self::WT_MODE);
+        $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_MODE);
         if ($vid !== false) {
             $this->RegisterMessage($vid, VM_UPDATE);
         }
@@ -262,11 +262,11 @@ class WallThermostat extends IPSModule
         $modeID = 1;
         $thermostat = $this->ReadPropertyInteger('Thermostat');
         if (IPS_InstanceExists($thermostat)) {
-            $vid = @GetObjectByIdent($thermostat, self::WT_PROFILE);
+            $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_PROFILE);
             if ($vid !== false) {
                 $profileID = $vid;
             }
-            $vid = @GetObjectByIdent($thermostat, self::WT_MODE);
+            $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_MODE);
             if ($vid !== false) {
                 $modeID = $vid;
             }
@@ -401,11 +401,11 @@ class WallThermostat extends IPSModule
         // for both the same
         if (($cooling || $heating) && $check) {
             $thermostat = $this->ReadPropertyInteger('Thermostat');
-            $vid = @GetObjectByIdent($thermostat, self::WT_ACTUAL);
+            $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_ACTUAL);
             if ($vid !== false) {
                 $at = GetValueFloat($vid);
             }
-            $vid = @GetObjectByIdent($thermostat, self::WT_TEMP);
+            $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_TEMP);
             if ($vid !== false) {
                 $st = GetValueFloat($vid);
             }
@@ -434,7 +434,7 @@ class WallThermostat extends IPSModule
                 $vs = -1;
                 $radiator = $this->ReadPropertyInteger('Radiator' . $i);
                 if ($radiator >= self::IPS_MIN_ID) {
-                    $vid = @GetObjectByIdent($radiator, self::WT_STATE);
+                    $vid = @IPS_GetObjectIDByIdent($radiator, self::WT_STATE);
                     if ($vid !== false) {
                         $vs = GetValueInteger($vid);
                     }
