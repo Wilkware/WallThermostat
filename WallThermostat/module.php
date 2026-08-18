@@ -2,49 +2,88 @@
 
 declare(strict_types=1);
 
-// Generell funktions
+/** Generell funktions */
 require_once __DIR__ . '/../libs/_traits.php';
+
+/** Namespaced traits */
+use Wilkware\WallThermostat\DebugHelper;
+use Wilkware\WallThermostat\EventHelper;
+use Wilkware\WallThermostat\VariableHelper;
+use Wilkware\WallThermostat\VersionHelper;
 
 /**
  * CLASS WallThermostat
  */
-class WallThermostat extends IPSModule
+class WallThermostat extends IPSModuleStrict
 {
+    // -------------------------------------------------------------------------
+    // Traits
+    // -------------------------------------------------------------------------
+
     use DebugHelper;
     use EventHelper;
     use VariableHelper;
     use VersionHelper;
 
+    // -------------------------------------------------------------------------
     // Constants
-    public const WT_DEVICE = '{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}';
+    // -------------------------------------------------------------------------
+
+    /** @var string Active Profile variable name */
     public const WT_PROFILE = 'ACTIVE_PROFILE';
+
+    /** @var string Set Temperature Mode variable name */
     public const WT_MODE = 'SET_POINT_MODE';
+
+    /** @var string Actual Temperature variable name */
     public const WT_ACTUAL = 'ACTUAL_TEMPERATURE';
+
+    /** @var string Set Point Temperature variable name */
     public const WT_TEMP = 'SET_POINT_TEMPERATURE';
+
+    /** @var string Valve State variable name */
     public const WT_STATE = 'VALVE_STATE';
 
+    /** @var string Cooling message ident constant */
     public const WT_COOLING = 'COOLING';
+
+    /** @var string Heating message ident constant */
     public const WT_HEATING = 'HEATING';
+
+    /** @var string Ventile message ident constant */
     public const WT_VENTILE = 'VENTILE';
 
-    // Min IPS Object ID
+    /** @var int Min instance ID constant */
     private const IPS_MIN_ID = 10000;
 
-    // Schedule constant
+    /** @var int Schedule recording constant OFF */
     private const WT_SCHEDULE_CONTROL_OFF = 1;
+
+    /** @var int Schedule recording constant ON */
     private const WT_SCHEDULE_CONTROL_ON = 2;
+
+    /** @var string Schedule recording constant IDENT */
     private const WT_SCHEDULE_CONTROL_IDENT = 'circuit_control';
+
+    /**
+     * @var array<int,array{0:string,1:int,2:string}> Schedule recording constant ACTION (Switch)
+     */
     private const WT_SCHEDULE_CONTROL_SWITCH = [
         self::WT_SCHEDULE_CONTROL_OFF => ['Inaktive', 0xFF0000, "IPS_RequestAction(\$_IPS['TARGET'], 'schedule_control', \$_IPS['ACTION']);"],
         self::WT_SCHEDULE_CONTROL_ON  => ['Aktive', 0x00FF00, "IPS_RequestAction(\$_IPS['TARGET'], 'schedule_control', \$_IPS['ACTION']);"],
     ];
 
+    // -------------------------------------------------------------------------
+    // Methods
+    // -------------------------------------------------------------------------
+
     /**
      * In contrast to Construct, this function is called only once when creating the instance and starting IP-Symcon.
      * Therefore, status variables and module properties which the module requires permanently should be created here.
      *
+     * @return void
      */
-    public function Create()
+    public function Create(): void
     {
         //Never delete this line!
         parent::Create();
@@ -103,14 +142,20 @@ class WallThermostat extends IPSModule
      * This function is called when deleting the instance during operation and when updating via "Module Control".
      * The function is not called when exiting IP-Symcon.
      *
+     * @return void
      */
-    public function Destroy()
+    public function Destroy(): void
     {
         // Never delete this line!
         parent::Destroy();
     }
 
-    public function ApplyChanges()
+    /**
+     * Is executed when "Apply" is pressed on the configuration page and immediately after the instance has been created.
+     *
+     * @return void
+     */
+    public function ApplyChanges(): void
     {
         parent::ApplyChanges();
 
@@ -132,7 +177,7 @@ class WallThermostat extends IPSModule
             if (IPS_InstanceExists($thermostat)) {
                 $this->RegisterReference($thermostat);
             } else {
-                $this->SendDebug(__FUNCTION__, 'Instance does not exist - Variable: ' . $thermostat);
+                $this->LogDebug(__FUNCTION__, 'Instance does not exist - Variable: ' . $thermostat);
                 $this->SetStatus(104);
                 return;
             }
@@ -143,7 +188,7 @@ class WallThermostat extends IPSModule
                 if (IPS_InstanceExists($radiator)) {
                     $this->RegisterReference($radiator);
                 } else {
-                    $this->SendDebug(__FUNCTION__, 'Instance does not exist - Variable: ' . $radiator);
+                    $this->LogDebug(__FUNCTION__, 'Instance does not exist - Variable: ' . $radiator);
                     $this->SetStatus(104);
                     return;
                 }
@@ -154,7 +199,7 @@ class WallThermostat extends IPSModule
             if (IPS_VariableExists($heating)) {
                 $this->RegisterReference($heating);
             } else {
-                $this->SendDebug(__FUNCTION__, 'Variable does not exist - Variable: ' . $heating);
+                $this->LogDebug(__FUNCTION__, 'Variable does not exist - Variable: ' . $heating);
                 $this->SetStatus(104);
                 return;
             }
@@ -164,7 +209,7 @@ class WallThermostat extends IPSModule
             if (IPS_InstanceExists($visu)) {
                 $this->RegisterReference($visu);
             } else {
-                $this->SendDebug(__FUNCTION__, 'Instance does not exist - Variable: ' . $visu);
+                $this->LogDebug(__FUNCTION__, 'Instance does not exist - Variable: ' . $visu);
                 $this->SetStatus(104);
                 return;
             }
@@ -174,7 +219,7 @@ class WallThermostat extends IPSModule
             if (IPS_EventExists($schedule)) {
                 $this->RegisterReference($schedule);
             } else {
-                $this->SendDebug(__FUNCTION__, 'Event does not exist - Variable: ' . $schedule);
+                $this->LogDebug(__FUNCTION__, 'Event does not exist - Variable: ' . $schedule);
                 $this->SetStatus(104);
                 return;
             }
@@ -184,18 +229,18 @@ class WallThermostat extends IPSModule
             if (IPS_ScriptExists($script)) {
                 $this->RegisterReference($script);
             } else {
-                $this->SendDebug(__FUNCTION__, 'Script does not exist - Variable: ' . $script);
+                $this->LogDebug(__FUNCTION__, 'Script does not exist - Variable: ' . $script);
                 $this->SetStatus(104);
                 return;
             }
         }
 
         // Register message update for variables
-        $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_PROFILE);
+        $vid = @IPS_GetObjectIDByName(self::WT_PROFILE, $thermostat);
         if ($vid !== false) {
             $this->RegisterMessage($vid, VM_UPDATE);
         }
-        $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_MODE);
+        $vid = @IPS_GetObjectIDByName(self::WT_MODE, $thermostat);
         if ($vid !== false) {
             $this->RegisterMessage($vid, VM_UPDATE);
         }
@@ -231,7 +276,7 @@ class WallThermostat extends IPSModule
                     $this->SetTimerInterval('TimerControl', (60 * 1000 * $interval));
                 } else {
                     $wsi = $this->GetWeeklyScheduleInfo($schedule, time(), true);
-                    $this->SendDebug(__FUNCTION__, $wsi);
+                    $this->LogDebug(__FUNCTION__, $wsi);
                     if ($wsi['ActionID'] == self::WT_SCHEDULE_CONTROL_ON) {
                         $this->SetTimerInterval('TimerControl', (60 * 1000 * $interval));
                     }
@@ -248,42 +293,49 @@ class WallThermostat extends IPSModule
     }
 
     /**
-     * MessageSink - internal SDK funktion.
+     * The content of the function can be overwritten in order to carry out own reactions to certain messages.
+     * The function is only called for registered MessageIDs/SenderIDs combinations.
      *
-     * @param mixed $timeStamp Message timeStamp
-     * @param mixed $senderID Sender ID
-     * @param mixed $message Message type
-     * @param mixed $data data[0] = new value, data[1] = value changed, data[2] = old value, data[3] = timestamp
+     * data[0] = new value
+     * data[1] = value changed?
+     * data[2] = old value
+     * data[3] = timestamp.
+     *
+     * @param int   $timestamp Continuous counter timestamp
+     * @param int   $sender    Sender ID
+     * @param int   $message   ID of the message
+     * @param array{0:mixed,1:bool,2:mixed,3:int} $data Data of the message
+     * @return void
      */
-    public function MessageSink($timeStamp, $senderID, $message, $data)
+    public function MessageSink(int $timestamp, int $sender, int $message, array $data): void
     {
-        //$this->SendDebug(__FUNCTION__, 'SenderId: '. $senderID . ' Data: ' . print_r($data, true), 0);
-        $profileID = 1;
-        $modeID = 1;
+        //$this->LogDebug(__FUNCTION__, 'SenderId: '. $senderID . ' Data: ' . print_r($data, true), 0);
+        $profile = 1;
+        $mode = 1;
         $thermostat = $this->ReadPropertyInteger('Thermostat');
         if (IPS_InstanceExists($thermostat)) {
-            $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_PROFILE);
+            $vid = @IPS_GetObjectIDByName(self::WT_PROFILE, $thermostat);
             if ($vid !== false) {
-                $profileID = $vid;
+                $profile = $vid;
             }
-            $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_MODE);
+            $vid = @IPS_GetObjectIDByName(self::WT_MODE, $thermostat);
             if ($vid !== false) {
-                $modeID = $vid;
+                $mode = $vid;
             }
         }
         switch ($message) {
             case VM_UPDATE:
-                if ($senderID == $profileID) {
+                if ($sender == $profile) {
                     // state changes ?
                     if ($data[1] == true) {
-                        $this->SendDebug(__FUNCTION__, 'Profile switched to <' . $data[0] . '>');
+                        $this->LogDebug(__FUNCTION__, 'Profile switched to <' . $data[0] . '>');
                         $this->Profile($data[0]);
                     }
                 }
-                if ($senderID == $modeID) {
+                if ($sender == $mode) {
                     // state changes ?
                     if ($data[1] == true) {
-                        $this->SendDebug(__FUNCTION__, 'Mode switched to <' . $data[0] . '>');
+                        $this->LogDebug(__FUNCTION__, 'Mode switched to <' . $data[0] . '>');
                         $this->Mode($data[0]);
                     }
                 }
@@ -295,13 +347,15 @@ class WallThermostat extends IPSModule
     /**
      * Is called when, for example, a button is clicked in the visualization.
      *
-     *  @param string $ident Ident of the variable
-     *  @param string $value The value to be set
+     * @param string $ident Ident of the variable
+     * @param mixed $value The value to be set
+     *
+     * @return void
      */
-    public function RequestAction($ident, $value)
+    public function RequestAction(string $ident, mixed $value): void
     {
         // Debug output
-        $this->SendDebug(__FUNCTION__, $ident . ' => ' . $value);
+        $this->LogDebug(__FUNCTION__, $ident . ' => ' . $value);
         // Ident == OnXxxxxYyyyy
         switch ($ident) {
             case 'create_schedule':
@@ -323,9 +377,11 @@ class WallThermostat extends IPSModule
     /**
      * Profile - switch profile.
      *
-     * @* @param int $value Value of the new selected profile.
+     * @param int $value Value of the new selected profile.
+     *
+     * @return void
      */
-    private function Profile($value)
+    private function Profile($value): void
     {
         // Safty check
         if ($value < 1 || $value > 3) {
@@ -334,7 +390,7 @@ class WallThermostat extends IPSModule
         // Switch all radiators
         for ($i = 1; $i <= 8; $i++) {
             $radiator = $this->ReadPropertyInteger('Radiator' . $i);
-            $this->SendDebug(__FUNCTION__, 'Radiator' . $i . ': ID => ' . $radiator);
+            $this->LogDebug(__FUNCTION__, 'Radiator' . $i . ': ID => ' . $radiator);
             if (IPS_InstanceExists($radiator)) {
                 $ret = HM_WriteValueInteger($radiator, 'ACTIVE_PROFILE', $value);
             }
@@ -344,9 +400,11 @@ class WallThermostat extends IPSModule
     /**
      * Mode - switch mode.
      *
-     * @* @param int $value Value of the new selected mode.
+     * @param int $value Value of the new selected mode.
+     *
+     * @return void
      */
-    private function Mode($value)
+    private function Mode($value): void
     {
         // Safty check
         if ($value < 0 || $value > 3) {
@@ -355,7 +413,7 @@ class WallThermostat extends IPSModule
         // Switch all radiators
         for ($i = 1; $i <= 8; $i++) {
             $radiator = $this->ReadPropertyInteger('Radiator' . $i);
-            $this->SendDebug(__FUNCTION__, 'Radiator' . $i . ': ID => ' . $radiator);
+            $this->LogDebug(__FUNCTION__, 'Radiator' . $i . ': ID => ' . $radiator);
             if (IPS_InstanceExists($radiator)) {
                 $ret = HM_WriteValueInteger($radiator, 'CONTROL_MODE', $value);
             }
@@ -365,8 +423,9 @@ class WallThermostat extends IPSModule
     /**
      * Control
      *
+     * @return void
      */
-    private function Control()
+    private function Control(): void
     {
         // What to check?
         $cooling = $this->ReadPropertyBoolean('CheckCooling');
@@ -376,11 +435,11 @@ class WallThermostat extends IPSModule
 
         $check = true;
         if ($circuit) {
-            $this->SendDebug(__FUNCTION__, 'CIRCUIT: ' . $circuit);
+            $this->LogDebug(__FUNCTION__, 'CIRCUIT: ' . $circuit);
             $vid = $this->ReadPropertyInteger('CircuitVariable');
             if (IPS_VariableExists($vid)) {
                 $state = GetValue($vid);
-                $this->SendDebug(__FUNCTION__, 'STATE: ' . $state);
+                $this->LogDebug(__FUNCTION__, 'STATE: ' . $state);
                 $type = $this->ReadPropertyInteger('CircuitType');
                 $value = $this->ReadPropertyString('CircuitValue');
                 if ($type == 0) {
@@ -392,7 +451,7 @@ class WallThermostat extends IPSModule
                 } else {
                     $check = ($state == $value);
                 }
-                $this->SendDebug(__FUNCTION__, 'CHECK: ' . var_export($check, true));
+                $this->LogDebug(__FUNCTION__, 'CHECK: ' . var_export($check, true));
             }
         }
         // Actual & Shall temperature
@@ -401,16 +460,16 @@ class WallThermostat extends IPSModule
         // for both the same
         if (($cooling || $heating) && $check) {
             $thermostat = $this->ReadPropertyInteger('Thermostat');
-            $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_ACTUAL);
+            $vid = @IPS_GetObjectIDByName(self::WT_ACTUAL, $thermostat);
             if ($vid !== false) {
                 $at = GetValueFloat($vid);
             }
-            $vid = @IPS_GetObjectIDByIdent($thermostat, self::WT_TEMP);
+            $vid = @IPS_GetObjectIDByName(self::WT_TEMP, $thermostat);
             if ($vid !== false) {
                 $st = GetValueFloat($vid);
             }
         }
-        $this->SendDebug(__FUNCTION__, 'ACTUAL: ' . $at . ', TARGET: ' . $st);
+        $this->LogDebug(__FUNCTION__, 'ACTUAL: ' . $at . ', TARGET: ' . $st);
         // frist "Cool down"
         if ($cooling) {
             $dc = $this->ReadPropertyFloat('DegreeCooling');
@@ -434,11 +493,11 @@ class WallThermostat extends IPSModule
                 $vs = -1;
                 $radiator = $this->ReadPropertyInteger('Radiator' . $i);
                 if ($radiator >= self::IPS_MIN_ID) {
-                    $vid = @IPS_GetObjectIDByIdent($radiator, self::WT_STATE);
+                    $vid = @IPS_GetObjectIDByName(self::WT_STATE, $radiator);
                     if ($vid !== false) {
                         $vs = GetValueInteger($vid);
                     }
-                    $this->SendDebug(__FUNCTION__, 'RADIATOR_' . $i . ': ' . $vs . ', SV: ' . $sv);
+                    $this->LogDebug(__FUNCTION__, 'RADIATOR_' . $i . ': ' . $vs . ', SV: ' . $sv);
                     // ready (4)
                     if ($sv == 0) {
                         if ($vs != 4) {
@@ -451,7 +510,7 @@ class WallThermostat extends IPSModule
                     }
                 }
             }
-            $this->SendDebug(__FUNCTION__, 'RADIATOR:' . $sm);
+            $this->LogDebug(__FUNCTION__, 'RADIATOR:' . $sm);
             if ($sm) {
                 $this->SendMessage(self::WT_VENTILE);
             }
@@ -462,13 +521,15 @@ class WallThermostat extends IPSModule
      * SendMessage - if setuped. its send a message to indicate the problems
      *
      * @param string $type
+     *
+     * @return void
      */
-    private function SendMessage(string $type)
+    private function SendMessage(string $type): void
     {
-        $this->SendDebug(__FUNCTION__, 'TYPE: ' . $type);
+        $this->LogDebug(__FUNCTION__, 'TYPE: ' . $type);
         $dashboard = $this->ReadPropertyInteger('DashboardMessage');
         $notify = $this->ReadPropertyInteger('NotificationMessage');
-        $this->SendDebug(__FUNCTION__, 'DASHBOARD: ' . $dashboard . ', NOTIFY: ' . $notify);
+        $this->LogDebug(__FUNCTION__, 'DASHBOARD: ' . $dashboard . ', NOTIFY: ' . $notify);
         // Check output
         if (!$dashboard && !$notify) {
             // nothing to do
@@ -491,14 +552,14 @@ class WallThermostat extends IPSModule
         $value['DATE'] = (date('d.m.Y', time()));
         $value['TIME'] = (date('H:i:s', time()));
         $format = (($type == self::WT_VENTILE) ? $ventile : (($type == self::WT_COOLING) ? $cooling : $heating));
-        $this->SendDebug(__FUNCTION__, 'FORMAT: ' . $format);
+        $this->LogDebug(__FUNCTION__, 'FORMAT: ' . $format);
         // build message
         $text = $this->FormatMessage($value, $format);
         $image = (($type == self::WT_VENTILE) ? 'circle-exclamation' : (($type == self::WT_COOLING) ? 'temperature-low' : 'temperature-high'));
         $code = 1;
         $time = $lifetime * 60;
         // debug
-        $this->SendDebug(__FUNCTION__, 'IMAGE:' . $image . ', TEXT: ' . $text . ', TIME:' . $time);
+        $this->LogDebug(__FUNCTION__, 'IMAGE:' . $image . ', TEXT: ' . $text . ', TIME:' . $time);
         // send notify?
         if ($notify && ($visu >= self::IPS_MIN_ID)) {
             if ($this->IsWebFrontVisuInstance($visu)) {
@@ -521,10 +582,12 @@ class WallThermostat extends IPSModule
     /**
      * Format a given array to a string.
      *
-     * @param array $value Weather warning data
+     * @param array<string,string> $value Heating inspection data
      * @param string $format Format string
+     *
+     * @return string Formatted string
      */
-    private function FormatMessage(array $value, $format)
+    private function FormatMessage(array $value, string $format): string
     {
         $output = str_replace('%R', $value['ROOM'], $format);
         $output = str_replace('%M', $value['TYPE'], $output);
@@ -537,27 +600,29 @@ class WallThermostat extends IPSModule
      * Weekly Schedule event
      *
      * @param integer $value Action value (ON=2, OFF=1)
+     *
+     * @return void
      */
-    private function ScheduleControl(int $value)
+    private function ScheduleControl(int $value): void
     {
         $schedule = $this->ReadPropertyInteger('TestSchedule');
-        $this->SendDebug(__FUNCTION__, 'Value: ' . $value . ',Schedule: ' . $schedule);
+        $this->LogDebug(__FUNCTION__, 'Value: ' . $value . ',Schedule: ' . $schedule);
         if ($schedule == 0) {
             // nothing todo
             return;
         }
         // Is Activate OFF
         if ($value == self::WT_SCHEDULE_CONTROL_OFF) {
-            $this->SendDebug(__FUNCTION__, 'OFF: Deactivate schedule timer!');
+            $this->LogDebug(__FUNCTION__, 'OFF: Deactivate schedule timer!');
             // Reset Timer
             $this->SetTimerInterval('TimerControl', 0);
             return;
         }
         // Schedule is aktiv?
         $interval = $this->ReadPropertyInteger('TestInterval');
-        $this->SendDebug(__FUNCTION__, 'ON: Interval is:' . $interval);
+        $this->LogDebug(__FUNCTION__, 'ON: Interval is:' . $interval);
         if ($interval > 0) {
-            $this->SendDebug(__FUNCTION__, 'ON: Activate schedule timer:' . $interval);
+            $this->LogDebug(__FUNCTION__, 'ON: Activate schedule timer:' . $interval);
             $this->SetTimerInterval('TimerControl', 60 * 1000 * $interval);
             // Start with Update and than wait for Timer
             $this->Control();
@@ -567,11 +632,12 @@ class WallThermostat extends IPSModule
     /**
      * Create week schedule for snapshots
      *
+     * @return void
      */
-    private function CreateSchedule()
+    private function CreateSchedule(): void
     {
         $eid = $this->CreateWeeklySchedule($this->InstanceID, $this->Translate('Schedule control'), self::WT_SCHEDULE_CONTROL_IDENT, self::WT_SCHEDULE_CONTROL_SWITCH, -1);
-        if ($eid !== false) {
+        if ($eid >= self::IPS_MIN_ID) {
             $this->UpdateFormField('TestSchedule', 'value', $eid);
         }
     }
