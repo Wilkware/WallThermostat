@@ -1,5 +1,6 @@
 # Wandthermostat (Wall Thermostat)
 
+[![Home](https://img.shields.io/badge/Home-wilkware.de-0b1830.svg?style=flat-square)](https://wilkware.de/module/wandthermostat/)
 [![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg?style=flat-square)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
 [![Product](https://img.shields.io/badge/Symcon%20Version-6.4-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
 [![Version](https://img.shields.io/badge/Modul%20Version-2.1.20250703-orange.svg?style=flat-square)](https://github.com/Wilkware/WallThermostat)
@@ -13,11 +14,12 @@ Das Modul synchronisiert das gewählte Heizprofil bzw. -modus mit den verknüpft
 1. [Funktionsumfang](#user-content-1-funktionsumfang)
 2. [Voraussetzungen](#user-content-2-voraussetzungen)
 3. [Installation](#user-content-3-installation)
-4. [Einrichten der Instanzen in IP-Symcon](#user-content-4-einrichten-der-instanzen-in-ip-symcon)
-5. [Statusvariablen und Profile](#user-content-5-statusvariablen-und-profile)
-6. [Visualisierung](#user-content-6-visualisierung)
-7. [PHP-Befehlsreferenz](#user-content-7-php-befehlsreferenz)
-8. [Versionshistorie](#user-content-8-versionshistorie)
+4. [Einrichtung](#user-content-4-einrichtung)
+5. [Statusvariablen](#user-content-5-statusvariablen)
+6. [Darstellungen](#user-content-6-darstellungen)
+7. [Visualisierung](#user-content-7-visualisierung)
+8. [Befehlsreferenz](#user-content-8-befehlsreferenz)
+9. [Versionshistorie](#user-content-9-versionshistorie)
 
 ### 1. Funktionsumfang
 
@@ -30,16 +32,16 @@ Das Modul synchronisiert das gewählte Heizprofil bzw. -modus mit den verknüpft
 
 ### 2. Voraussetzungen
 
-* IP-Symcon ab Version 6.4
+* Symcon ab Version 6.4
 * Heizkörpersteuerung getestet mit HmIP-WTH2 und/oder eTRV(-2/c)
 
 ### 3. Installation
 
 * Über den Modul Store das Modul _Wandthermostat_ installieren.
-* Alternativ Über das Modul-Control folgende URL hinzufügen.  
+* Alternativ über das Modul Control folgende URL hinzufügen.  
 `https://github.com/Wilkware/WallThermostat` oder `git://github.com/Wilkware/WallThermostat.git`
 
-### 4. Einrichten der Instanzen in IP-Symcon
+### 4. Einrichtung
 
 * Unter 'Instanz hinzufügen' ist das _Wandthermostat_-Modul unter dem Hersteller '(Geräte)' aufgeführt.
 
@@ -47,21 +49,21 @@ __Konfigurationsseite__:
 
 Einstellungsbereich:
 
-> Heizungssystem ...
+> 🌡️ Heizungssystem ...
 
 Name                            | Beschreibung
 ------------------------------- | -----------------------------------------------------------------
 (Wand)thermostat                | Steuerungskanal des führenden(übersteuernden) Thermostates (Kanal 1)
 1.Heizkörper                    | Steuerungskanal des ersten Stellantriebs (Kanal 1)
 2.Heizkörper                    | Steuerungskanal des zweiten Stellantriebs (Kanal 1)
-3.Heizkörper                    | Steuerungskanal des drittem Stellantriebs (Kanal 1)
+3.Heizkörper                    | Steuerungskanal des dritten Stellantriebs (Kanal 1)
 4.Heizkörper                    | Steuerungskanal des vierten Stellantriebs (Kanal 1)
 5.Heizkörper                    | Steuerungskanal des fünften Stellantriebs (Kanal 1)
 6.Heizkörper                    | Steuerungskanal des sechsten Stellantriebs (Kanal 1)
 7.Heizkörper                    | Steuerungskanal des siebten Stellantriebs (Kanal 1)
 8.Heizkörper                    | Steuerungskanal des achten Stellantriebs (Kanal 1)
 
-> Periodische Überprüfung ...
+> 🔬 Periodische Überprüfung ...
 
 Name                     | Beschreibung
 ------------------------ | ------------------
@@ -75,14 +77,14 @@ Heizungsschaltung        | Variable, welche den Modus des Heizung beinhaltet
 Typ                      | Auswahl des Variablentyps
 Wert                     | Wert, bei welchem die Prüfung durchgeführt werden soll
 
-> Zeitsteuerung ...
+> ⏲️ Zeitsteuerung ...
 
 Name                     | Beschreibung
 ------------------------ | ------------------
 Prüfintervall            | Zeit zwischen 2 Inspektionsläufen (Standard 120 Minuten), 0 deaktiviert die Prüfung
-Zeitplan                 | Zeitraum in dem Prüfungen im angeegebenen Intervall erfolgen sollen
+Zeitplan                 | Zeitraum in dem Prüfungen im angegebenen Intervall erfolgen sollen
 
-> Meldungsverwaltung ...
+> 📟 Meldungsverwaltung ...
 
 Name                                      | Beschreibung
 ----------------------------------------- | -----------------------------------------------------------------
@@ -95,31 +97,39 @@ Format der Textmitteilung (Aufheizung)    | Frei wählbares Format der Nachricht
 Format der Textmitteilung (Ventilzustand) | Frei wählbares Format der Nachricht/Meldung beim Eintreten eines Problems bei den Stellantrieben
 Visualisierungs-Instanz                   | ID der Visualisierung, an welches die Push-Nachrichten gesendet werden soll (WebFront oder TileVisu Instanz)
 Titel der Nachricht                       | Titel der Push-Nachricht, darf maximal 32 Zeichen lang sein
-Meldsungsskript                           | Skript ID des Meldungsverwaltungsskripts
+Meldungsskript                            | Skript ID des Meldungsverwaltungsskripts
 
-> Erweiterte Einstellungrn ...
+> ⚙️ Erweiterte Einstellungen ...
 
 Name                                 | Beschreibung
 ------------------------------------ | -----------------------------------------------------------------
-Checkpox  Profilabgleich             | Erstellt ein Schalter zum Aktivieren bzw. Deaktivieren des Profilabgleichs
-Checkpox  Modusabgleich              | Erstellt ein Schalter zum Aktivieren bzw. Deaktivieren des Modusabgleichs
+Checkbox Profilabgleich              | Erstellt ein Schalter zum Aktivieren bzw. Deaktivieren des Profilabgleichs
+Checkbox Modusabgleich               | Erstellt ein Schalter zum Aktivieren bzw. Deaktivieren des Modusabgleichs
 
-### 5. Statusvariablen und Profile
+### 5. Statusvariablen
 
-Name                 | Typ       | Beschreibung
--------------------- | --------- | ----------------
-Profil               | Boolean   | Schalter mit Variablenprofil ~Switch (Standard: true)
-Modus                | Boolean   | Schalter mit Variablenprofil ~Switch (Standard: true)
+Die Statusvariablen werden automatisch angelegt. Das Löschen einzelner kann zu Fehlfunktionen führen.
 
-### 6. Visualisierung
+Name                 | Typ     | Beschreibung
+-------------------- | ------- | ------------------------------
+Profil               | Boolean | Aktiviert bzw. deaktiviert den Profilabgleich (Standard: true)
+Modus                | Boolean | Aktiviert bzw. deaktiviert den Modusabgleich (Standard: true)
+
+_Hinweis:_ Die Statusvariablen werden nur angelegt, wenn die entsprechende Checkbox unter 'Erweiterte Einstellungen' aktiviert ist.
+
+### 6. Darstellungen
+
+Es werden keine Darstellungen oder Profile benötigt.
+
+### 7. Visualisierung
 
 Die erzeugten Variablen können direkt in die Visualisierung verlingt werden.  
 
-### 7. PHP-Befehlsreferenz
+### 8. Befehlsreferenz
 
 Das Modul stellt keine direkten Funktionsaufrufe zur Verfügung.
 
-### 8. Versionshistorie
+### 9. Versionshistorie
 
 v2.1.20250703
 
@@ -137,7 +147,7 @@ v1.0.20240913
 
 ## Entwickler
 
-Seit nunmehr über 10 Jahren fasziniert mich das Thema Haussteuerung. In den letzten Jahren betätige ich mich auch intensiv in der IP-Symcon Community und steuere dort verschiedenste Skript und Module bei. Ihr findet mich dort unter dem Namen @pitti ;-)
+Seit nunmehr über 10 Jahren fasziniert mich das Thema Haussteuerung. In den letzten Jahren betätige ich mich auch intensiv in der Symcon Community und steuere dort verschiedenste Skript und Module bei. Ihr findet mich dort unter dem Namen @pitti ;-)
 
 [![GitHub](https://img.shields.io/badge/GitHub-@wilkware-181717.svg?style=for-the-badge&logo=github)](https://wilkware.github.io/)
 
