@@ -17,11 +17,9 @@ parameters:
             
     # Supress call to an undefined method OR function not found
     ignoreErrors:
-        - identifier: trait.unused
         - '#Function HM_WriteValueInteger not found.#'
         - '#Function WFC_PushNotification not found.#'
         - '#Function VISU_PostNotificationEx not found.#'
-
 
     # Supress ignore errors
     reportUnmatchedIgnoredErrors: false

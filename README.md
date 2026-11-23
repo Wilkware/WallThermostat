@@ -1,9 +1,9 @@
-# Wandthermostat (Wall Thermostat)
+# 🔥 Wandthermostat (Wall Thermostat)
 
 [![Home](https://img.shields.io/badge/Home-wilkware.de-0b1830.svg?style=flat-square)](https://wilkware.de/module/wandthermostat/)
 [![Version](https://img.shields.io/badge/Symcon-PHP--Modul-red.svg?style=flat-square)](https://www.symcon.de/service/dokumentation/entwicklerbereich/sdk-tools/sdk-php/)
-[![Product](https://img.shields.io/badge/Symcon%20Version-6.4-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
-[![Version](https://img.shields.io/badge/Modul%20Version-2.1.20250703-orange.svg?style=flat-square)](https://github.com/Wilkware/WallThermostat)
+[![Product](https://img.shields.io/badge/Symcon%20Version-8.1-blue.svg?style=flat-square)](https://www.symcon.de/produkt/)
+[![Version](https://img.shields.io/badge/Modul%20Version-3.0.20261106-orange.svg?style=flat-square)](https://github.com/Wilkware/WallThermostat)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-green.svg?style=flat-square)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Actions](https://img.shields.io/github/actions/workflow/status/wilkware/WallThermostat/ci.yml?branch=main&label=CI&style=flat-square)](https://github.com/Wilkware/WallThermostat/actions)
 
@@ -27,12 +27,13 @@ Das Modul synchronisiert das gewählte Heizprofil bzw. -modus mit den verknüpft
 * Selektive Synchronisation von Profil und Modus
 * Überwachung von zu starker Abkühlung bzw. Aufheizung
 * Berücksichtigung der Heizungsschaltung
-* Überwachung des Beriebszustandes der Stellantriebe (Radiatoren)
-* Nur für Homatic Geräte derzeit geeignet!
+* Überwachung des Betriebszustandes der Stellantriebe (Radiatoren)
+* Meldung nur beim Eintreten eines neuen Problems (keine Wiederholung bei jedem Prüflauf)
+* Nur für HomeMatic Geräte derzeit geeignet!
 
 ### 2. Voraussetzungen
 
-* Symcon ab Version 6.4
+* Symcon ab Version 8.1
 * Heizkörpersteuerung getestet mit HmIP-WTH2 und/oder eTRV(-2/c)
 
 ### 3. Installation
@@ -95,9 +96,11 @@ Raumname                                  | Text zur eindeutigen Zuordnung des R
 Format der Textmitteilung (Abkühlung)     | Frei wählbares Format der Nachricht/Meldung beim Eintreten einer zu starken Raumabkühlung
 Format der Textmitteilung (Aufheizung)    | Frei wählbares Format der Nachricht/Meldung beim Eintreten einer zu starken Raumaufheizung
 Format der Textmitteilung (Ventilzustand) | Frei wählbares Format der Nachricht/Meldung beim Eintreten eines Problems bei den Stellantrieben
-Visualisierungs-Instanz                   | ID der Visualisierung, an welches die Push-Nachrichten gesendet werden soll (WebFront oder TileVisu Instanz)
+Visualisierungs-Instanz                   | ID der Visualisierung, an welche die Push-Nachrichten gesendet werden soll (WebFront oder TileVisu Instanz)
 Titel der Nachricht                       | Titel der Push-Nachricht, darf maximal 32 Zeichen lang sein
+Ton der Benachrichtigung                  | Ton der Push-Nachricht (WebFront und Kachel-Visu, Standard: buzzer)
 Meldungsskript                            | Skript ID des Meldungsverwaltungsskripts
+Meldungsschlüssel (optional)              | Leer = jede Meldung wird neu hinzugefügt (wie bisher). Mit Schlüssel wird eine bestehende Meldung gleichen Typs (Abkühlung, Aufheizung, Ventilzustand) und Schlüssels aktualisiert (Meldungsskript ab v8, ältere Skripte ignorieren den Schlüssel). Gleicher Schlüssel in mehreren Instanzen ergibt je Typ eine gemeinsame Meldung.
 
 > ⚙️ Erweiterte Einstellungen ...
 
@@ -106,30 +109,57 @@ Name                                 | Beschreibung
 Checkbox Profilabgleich              | Erstellt ein Schalter zum Aktivieren bzw. Deaktivieren des Profilabgleichs
 Checkbox Modusabgleich               | Erstellt ein Schalter zum Aktivieren bzw. Deaktivieren des Modusabgleichs
 
+Aktionsbereich:
+
+> 🧪 Test ...
+
+Aktion                   | Beschreibung
+------------------------ | ------------------------------------------------------------
+Prüfung ausführen        | Führt die Überprüfung sofort aus und zeigt das Ergebnis als Popup an (Meldung nur bei einem neuen Problem)
+
 ### 5. Statusvariablen
 
 Die Statusvariablen werden automatisch angelegt. Das Löschen einzelner kann zu Fehlfunktionen führen.
 
-Name                 | Typ     | Beschreibung
--------------------- | ------- | ------------------------------
-Profil               | Boolean | Aktiviert bzw. deaktiviert den Profilabgleich (Standard: true)
-Modus                | Boolean | Aktiviert bzw. deaktiviert den Modusabgleich (Standard: true)
+Ident        | Name   | Typ     | Beschreibung
+------------ | ------ | ------- | ------------------------------
+SyncProfile  | Profil | Boolean | Aktiviert bzw. deaktiviert den Profilabgleich (beim Anlegen: an)
+SyncMode     | Modus  | Boolean | Aktiviert bzw. deaktiviert den Modusabgleich (beim Anlegen: an)
 
-_Hinweis:_ Die Statusvariablen werden nur angelegt, wenn die entsprechende Checkbox unter 'Erweiterte Einstellungen' aktiviert ist.
+_Hinweis:_ Die Statusvariablen werden nur angelegt, wenn die entsprechende Checkbox unter 'Erweiterte Einstellungen' aktiviert ist. Ohne Variable wird immer abgeglichen.
 
 ### 6. Darstellungen
 
-Es werden keine Darstellungen oder Profile benötigt.
+Variable     | Darstellung | Werte
+------------ | ----------- | ------------------
+Profil       | Schalter    | An / Aus
+Modus        | Schalter    | An / Aus
 
 ### 7. Visualisierung
 
-Die erzeugten Variablen können direkt in die Visualisierung verlingt werden.  
+Die erzeugten Variablen können direkt in die Visualisierung verlinkt werden.  
 
 ### 8. Befehlsreferenz
 
 Das Modul stellt keine direkten Funktionsaufrufe zur Verfügung.
 
 ### 9. Versionshistorie
+
+v3.0.20261106
+
+* _NEU_: Ton der Push-Benachrichtigung einstellbar
+* _NEU_: Optionaler Meldungsschlüssel für das Meldungsskript (ab v8)
+* _NEU_: Schaltfläche „Prüfung ausführen“ im Aktionsbereich
+* _NEU_: Meldungen nur noch beim Eintreten eines neuen Problems
+* _NEU_: Fehlerstatus für ungültige Geräte und Objekte
+* _NEU_: Mindestversion Symcon 8.1
+* _FIX_: Schalter für Profil- und Modusabgleich waren ohne Funktion
+* _FIX_: Geräte-Variablen werden über Ident statt Name ermittelt
+* _FIX_: Profil der Heizkörper wird per RequestAction geschaltet, Modus weiterhin über CONTROL_MODE
+* _FIX_: Prüftimer wurde bei Konfigurationsänderungen nicht zuverlässig zurückgesetzt
+* _FIX_: Boolean-Vergleich der Heizungsschaltung
+* _FIX_: Initialisierung erst nach Systemstart
+* _FIX_: WebFront-Push verwendete das Icon als Ton
 
 v2.1.20250703
 
@@ -139,7 +169,7 @@ v2.1.20250703
 v2.0.20250209
 
 * _NEU_: Periodische Prüfung auf zu starker Abkühlung und/oder Aufheizung
-* _NEU_: Periodische Prüfung des Betriebszudtandes der verbundenen Stellantriebe
+* _NEU_: Periodische Prüfung des Betriebszustandes der verbundenen Stellantriebe
 
 v1.0.20240913
 

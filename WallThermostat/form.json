@@ -14,12 +14,12 @@
                     "items": [
                         {
                             "type": "Label",
-                            "label": "Wall Thermostat",
+                            "caption": "Wall Thermostat",
                             "bold": true
                         },
                         {
                             "type": "Label",
-                            "label": "The wall thermostat synchronises the selected heating profile/mode with the linked actuators."
+                            "caption": "The wall thermostat synchronises the selected heating profile/mode with the linked actuators."
                         }
                     ]
                 }
@@ -198,11 +198,11 @@
                             "width": "221px",
                             "options": [
                                 {
-                                    "label": "Not ready for operation",
+                                    "caption": "Not ready for operation",
                                     "value": 0
                                 },
                                 {
-                                    "label": "Error message",
+                                    "caption": "Error message",
                                     "value": 1
                                 }
                             ]
@@ -213,7 +213,7 @@
                     "type": "CheckBox",
                     "caption": "Observe the heating circuit when heating up or cooling down!",
                     "name": "CheckCircuit",
-                    "value": false
+                    "onChange": "IPS_RequestAction($id, 'circuit_check', $CheckCircuit);"
                 },
                 {
                     "type": "RowLayout",
@@ -317,11 +317,11 @@
                             "width": "200px",
                             "options": [
                                 {
-                                    "label": "No",
+                                    "caption": "No",
                                     "value": 0
                                 },
                                 {
-                                    "label": "Yes",
+                                    "caption": "Yes",
                                     "value": 1
                                 }
                             ]
@@ -333,27 +333,27 @@
                             "width": "221px",
                             "options": [
                                 {
-                                    "label": "Always",
+                                    "caption": "Always",
                                     "value": 0
                                 },
                                 {
-                                    "label": "5 min",
+                                    "caption": "5 min",
                                     "value": 5
                                 },
                                 {
-                                    "label": "15 min",
+                                    "caption": "15 min",
                                     "value": 15
                                 },
                                 {
-                                    "label": "30 min",
+                                    "caption": "30 min",
                                     "value": 30
                                 },
                                 {
-                                    "label": "60 min",
+                                    "caption": "60 min",
                                     "value": 60
                                 },
                                 {
-                                    "label": "2 h",
+                                    "caption": "2 h",
                                     "value": 120
                                 }
                             ]
@@ -370,12 +370,96 @@
                             "width": "200px",
                             "options": [
                                 {
-                                    "label": "No",
+                                    "caption": "No",
                                     "value": 0
                                 },
                                 {
-                                    "label": "Yes",
+                                    "caption": "Yes",
                                     "value": 1
+                                }
+                            ]
+                        },
+                        {
+                            "type": "Select",
+                            "name": "NotificationSound",
+                            "caption": "Sound of the notification:",
+                            "width": "221px",
+                            "options": [
+                                {
+                                    "caption": "alarm",
+                                    "value": "alarm"
+                                },
+                                {
+                                    "caption": "bell",
+                                    "value": "bell"
+                                },
+                                {
+                                    "caption": "boom",
+                                    "value": "boom"
+                                },
+                                {
+                                    "caption": "buzzer",
+                                    "value": "buzzer"
+                                },
+                                {
+                                    "caption": "connected",
+                                    "value": "connected"
+                                },
+                                {
+                                    "caption": "dark",
+                                    "value": "dark"
+                                },
+                                {
+                                    "caption": "digital",
+                                    "value": "digital"
+                                },
+                                {
+                                    "caption": "drums",
+                                    "value": "drums"
+                                },
+                                {
+                                    "caption": "duck",
+                                    "value": "duck"
+                                },
+                                {
+                                    "caption": "full",
+                                    "value": "full"
+                                },
+                                {
+                                    "caption": "happy",
+                                    "value": "happy"
+                                },
+                                {
+                                    "caption": "horn",
+                                    "value": "horn"
+                                },
+                                {
+                                    "caption": "inception",
+                                    "value": "inception"
+                                },
+                                {
+                                    "caption": "kazoo",
+                                    "value": "kazoo"
+                                },
+                                {
+                                    "caption": "roll",
+                                    "value": "roll"
+                                },
+                                {
+                                    "caption": "siren",
+                                    "value": "siren"
+                                },
+                                {
+                                    "caption": "space",
+                                    "value": "space"
+                                },
+                                {
+                                    "caption": "trickling",
+                                    "value": "trickling"
+                                },
+                                {
+                                    "caption": "turn",
+                                    "value": "turn"
                                 }
                             ]
                         }
@@ -445,7 +529,7 @@
                             "type": "ValidationTextBox",
                             "name": "TitleMessage",
                             "caption": "Title of the message (max. 32 characters):",
-                            "validate": "^[0-9a-zA-ZäöüÄÖÜß -_&]{0,32}$",
+                            "validate": "^[0-9a-zA-ZäöüÄÖÜß _&-]{0,32}$",
                             "width": "450px"
                         }
                     ]
@@ -455,10 +539,26 @@
                     "caption": "... to use the dashboard message script. More information you get in the forum to thema: Meldungsanzeige im WebFront:"
                 },
                 {
-                    "type": "SelectScript",
-                    "name": "ScriptMessage",
-                    "caption": "Message script:",
-                    "width": "450px"
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "SelectScript",
+                            "name": "ScriptMessage",
+                            "caption": "Message script:",
+                            "width": "450px"
+                        },
+                        {
+                            "type": "ValidationTextBox",
+                            "name": "MessageKey",
+                            "caption": "Message key (optional):",
+                            "width": "450px"
+                        }
+                    ]
+                },
+                {
+                    "type": "Label",
+                    "caption": "With a key, a message of the same type and key is updated instead of added again (requires message script v8 or newer). The same key in several instances shows only one common message per type.",
+                    "italic": true
                 }
             ]
         },
@@ -484,6 +584,41 @@
         }
     ],
     "actions": [
+        {
+            "name": "EchoPopup",
+            "type": "PopupAlert",
+            "visible": false,
+            "popup": {
+                "items": [
+                    {
+                        "type": "Label",
+                        "name": "EchoMessage",
+                        "caption": ""
+                    }
+                ]
+            }
+        },
+        {
+            "type": "ExpansionPanel",
+            "caption": "🧪 Test ...",
+            "items": [
+                {
+                    "type": "RowLayout",
+                    "items": [
+                        {
+                            "type": "Button",
+                            "caption": "Run inspection",
+                            "onClick": "IPS_RequestAction($id, 'control_test', '');"
+                        },
+                        {
+                            "type": "Label",
+                            "caption": "Carries out the inspection immediately and shows the result.",
+                            "italic": true
+                        }
+                    ]
+                }
+            ]
+        },
         {
             "type": "ExpansionPanel",
             "caption": "🎗️ Source code, donation and licence ...",
@@ -512,9 +647,30 @@
                             "onClick": "echo 'https://creativecommons.org/licenses/by-nc-sa/4.0/';"
                         }
                     ]
+                },
+                {
+                    "type": "Label",
+                    "name": "Version",
+                    "color": 8421504
                 }
             ]
         }
     ],
-    "status": []
+    "status": [
+        {
+            "code": 201,
+            "icon": "error",
+            "caption": "Thermostat or radiator instance is invalid!"
+        },
+        {
+            "code": 202,
+            "icon": "error",
+            "caption": "Heating circuit variable is invalid!"
+        },
+        {
+            "code": 203,
+            "icon": "error",
+            "caption": "Schedule, visualization instance or message script is invalid!"
+        }
+    ]
 }
